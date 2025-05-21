@@ -15,10 +15,17 @@ FROM gcc:latest AS build_samtools
 WORKDIR /samtools
 RUN git clone https://github.com/samtools/samtools.git .
 COPY --from=build_htslib /htslib/ /htslib/
-RUN autoheader && autoconf -Wno-syntax && ./configure --with-htslib=../htslib && make -j
+RUN autoheader && \
+    autoconf -Wno-syntax && \
+    ./configure --with-htslib=../htslib && \
+    make -j
 
 # Result image
+
+# TODO: build libdeflate manually
 FROM ubuntu:22.04
-RUN apt update && apt install -y libcurlpp-dev libdeflate-dev # TODO: build libdeflate manually
+RUN apt update && \
+    apt install -y libcurlpp-dev libdeflate-dev
+
 WORKDIR /soft
 COPY --from=build_samtools /samtools/samtools .
