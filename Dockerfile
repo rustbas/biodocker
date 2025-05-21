@@ -1,23 +1,50 @@
-FROM gcc:latest AS build_htslib
-WORKDIR /htslib
+FROM ubuntu:22.04 AS builder
+
+RUN apt update && apt upgrade -y
+
+RUN apt install --assume-yes \
+    cmake git build-essential autoconf
+
+WORKDIR /usr/src/libdelfate
+RUN git clone https://github.com/ebiggers/libdeflate.git .
+RUN cmake -B build && cd build && make -j && make install && ldconfig
 
 # Building htslib (TODO: use latest tag)
-RUN git clone --recursive https://github.com/samtools/htslib.git .
-RUN autoreconf -i && ./configure && make -j
+WORKDIR /usr/src/htslib
+RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git .
+RUN apt install --assume-yes \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libcurl3-gnutls-dev \
+    libncurses5-dev \
+    libgsl0-dev \
+    libperl-dev
+RUN autoreconf -i && ./configure && make -j && make install && ldconfig
 
 # Building samtools
-FROM gcc:latest AS build_samtools
-WORKDIR /samtools
+WORKDIR /usr/src/samtools
 RUN git clone https://github.com/samtools/samtools.git .
-COPY --from=build_htslib /htslib/ /htslib/
 RUN autoheader && \
     autoconf -Wno-syntax && \
-    ./configure --with-htslib=../htslib && \
+    ./configure &&\
     make -j
 
-# Result image
-# TODO: build libdeflate manually
-FROM gcc:latest
+WORKDIR /usr/src/bcftools
+RUN git clone --depth=1 https://github.com/samtools/bcftools.git .
+RUN autoheader && \
+    autoconf && \
+    ./configure --enable-libgsl --enable-perl-filters && \
+    make -j
 
-WORKDIR /soft
-COPY --from=build_samtools /samtools/samtools .
+WORKDIR /usr/src/vcftools
+RUN git clone https://github.com/vcftools/vcftools.git .
+RUN apt install -y pkg-config
+RUN ./autogen.sh && ./configure && make -j
+
+# # Result image
+# # TODO: build libdeflate manually
+# FROM gcc:latest
+
+# WORKDIR /soft
+# COPY --from=build_samtools /samtools/samtools .
