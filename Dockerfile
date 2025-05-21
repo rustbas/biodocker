@@ -1,16 +1,11 @@
 FROM gcc:latest AS build_htslib
 WORKDIR /htslib
 
-# RUN apt update &&       \
-#     apt upgrade -y &&   \
-#     apt install -y libgsl-dev
-
 # Building htslib (TODO: use latest tag)
 RUN git clone --recursive https://github.com/samtools/htslib.git .
 RUN autoreconf -i && ./configure && make -j
 
 # Building samtools
-
 FROM gcc:latest AS build_samtools
 WORKDIR /samtools
 RUN git clone https://github.com/samtools/samtools.git .
@@ -21,11 +16,8 @@ RUN autoheader && \
     make -j
 
 # Result image
-
 # TODO: build libdeflate manually
-FROM ubuntu:22.04
-RUN apt update && \
-    apt install -y libcurlpp-dev libdeflate-dev
+FROM gcc:latest
 
 WORKDIR /soft
 COPY --from=build_samtools /samtools/samtools .
