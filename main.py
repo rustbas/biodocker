@@ -1,15 +1,80 @@
-from pysam import Fastafile, VariantFile
+from pysam import Fastafile
+from sys import argv, stderr
+import argparse
+import logging
 
 INPUT_FILE = "FP_SNPs_10k_GB38_twoAllelsFormat.tsv"
 
-data = []
-with open(INPUT_FILE, "r") as f:
-    header = f.readline().strip().split('\t')
-    for line in f.readlines():
-        data.append(line.strip().split('\t'))
+format_header = "#CHROM\tPOS\tID\tREF\tALT"
+format_line = "{chrom}\t{pos}\t{rs}\t{ref}\t{alt}"
+warning_string = "Can't locate nucleotid \
+{ref} in reference ({nucl}), chrom:{chrom:>6s}, pos:{pos}"
+# Parsing arguments
 
-print(header)
-for d in data[:5]:
-    print(d)
+# TODO: Fill usage and description
+DESCRIPTION="""
 
-vcf = VariantFile(INPUT_FILE)
+"""
+
+parser = argparse.ArgumentParser(description=DESCRIPTION)
+# parser.add_argument('command', type=str, help="What should I do?")
+parser.add_argument('-i', '--input',
+                    type=str,
+                    required=True,
+                    help="VCF-like file, which need to be analysed")
+parser.add_argument('-o', '--output',
+                    type=str,
+                    default="stdout",
+                    help="Result file (default: stdout)")
+parser.add_argument('-l', '--log-file',
+                    type=str,
+                    default="stderr",
+                    help="Log-file (default: stderr)")
+namespace = parser.parse_args()
+
+if namespace.log_file != "stderr":
+    logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w",
+                        format="%(asctime)s %(levelname)s %(message)s")
+else:
+    logging.basicConfig(level=logging.INFO, stream=stderr,
+                        format="%(asctime)s %(levelname)s %(message)s")
+# TODO: check file exists
+
+# TODO: add output file if needed
+with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
+     open(INPUT_FILE, "r") as file:
+    header = file.readline().strip().split('\t')
+    logging.info(f'Readed header: {header}')
+    try:
+        assert(len(header) == 5)
+    except AssertionError:
+        n = len(header)
+        # TODO: Add logging
+        print("Except 5 fields, get", n)
+        exit(1)
+    # print(format_header)
+    for line in file.readlines()[:]:
+        chrom, pos, rs, ref, alt = line.strip().split('\t')
+        pos = int(pos) - 1 # In PySam start is 0-based
+        nucleotid_in_fasta = fasta.fetch(reference=chrom, start=pos, end=pos+1)
+
+        # Set REF as in FASTA file
+        if alt == nucleotid_in_fasta:
+            ref, alt = alt , ref
+
+        # Log if REF and ALT not as in FASTA file
+        if ref != nucleotid_in_fasta:
+            warning = warning_string.format(ref=ref,
+                                            nucl=nucleotid_in_fasta,
+                                            chrom=chrom,
+                                            pos=pos)
+            logging.warning(warning) # Log
+            continue
+
+        newline = format_line.format(chrom=chrom,
+                                     pos=pos,
+                                     rs=rs,
+                                     ref=ref,
+                                     alt=alt)
+
+        # print(newline)
