@@ -33,7 +33,8 @@ parser.add_argument('-l', '--log-file',
 namespace = parser.parse_args()
 
 if namespace.log_file != "stderr":
-    logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w",
+    logging.basicConfig(level=logging.INFO, filename=namespace.log_file,
+                        filemode="a",
                         format="%(asctime)s %(levelname)s %(message)s")
 else:
     logging.basicConfig(level=logging.INFO, stream=stderr,
