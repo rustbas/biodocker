@@ -1,12 +1,24 @@
-FROM gcc:latest AS build
-WORKDIR /app
+FROM gcc:latest AS build_htslib
+WORKDIR /htslib
 
-RUN apt update && \
-    apt upgrade -y && \
-    apt install -y libgsl-dev
+# RUN apt update &&       \
+#     apt upgrade -y &&   \
+#     apt install -y libgsl-dev
 
-RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git
-RUN cd htslib && autoreconf -i && ./configure && make -j
-RUN git clone --depth=1 https://github.com/samtools/bcftools.git
-RUN cd bcftools && autoheader && autoconf && ./configure --enable-libgsl --enable-perl-filters
+# Building htslib (TODO: use latest tag)
+RUN git clone --recursive https://github.com/samtools/htslib.git .
+RUN autoreconf -i && ./configure && make -j
 
+# Building samtools
+
+FROM gcc:latest AS build_samtools
+WORKDIR /samtools
+RUN git clone https://github.com/samtools/samtools.git .
+COPY --from=build_htslib /htslib/ /htslib/
+RUN autoheader && autoconf -Wno-syntax && ./configure --with-htslib=../htslib && make -j
+
+# Result image
+FROM ubuntu:22.04
+RUN apt update && apt install -y libcurlpp-dev libdeflate-dev # TODO: build libdeflate manually
+WORKDIR /soft
+COPY --from=build_samtools /samtools/samtools .
