@@ -42,9 +42,22 @@ RUN git clone https://github.com/vcftools/vcftools.git .
 RUN apt install -y pkg-config
 RUN ./autogen.sh && ./configure && make -j
 
-# # Result image
-# # TODO: build libdeflate manually
-# FROM gcc:latest
+# Result image
+# TODO: build libdeflate manually
+FROM ubuntu:22.04
+RUN apt update && apt upgrade -y
+COPY --from=builder /usr/local /usr/local
+COPY --from=builder /usr/src/samtools/samtools /soft/samtools
+COPY --from=builder /usr/src/bcftools/bcftools /soft/bcftools
+RUN ldconfig
+RUN apt install --assume-yes --no-install-recommends\
+    libgsl0-dev \
+    libperl-dev \
+    libcurl3-gnutls-dev
 
-# WORKDIR /soft
-# COPY --from=build_samtools /samtools/samtools .
+#     zlib1g-dev \
+#     libbz2-dev \
+#     liblzma-dev \
+#     libncurses5-dev \
+
+WORKDIR /soft
