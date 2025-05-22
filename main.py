@@ -10,7 +10,8 @@ format_header = "#CHROM\tPOS\tID\tREF\tALT"
 format_line = "{chrom}\t{pos}\t{rs}\t{ref}\t{alt}"
 warning_string = "Can't locate nucleotid \
 {ref} in reference ({nucl}), chrom:{chrom:>6s}, pos:{pos}"
-# Parsing arguments
+
+
 
 # TODO: Fill usage and description
 DESCRIPTION="""
@@ -18,12 +19,11 @@ DESCRIPTION="""
 """
 
 parser = argparse.ArgumentParser(description=DESCRIPTION)
-# parser.add_argument('command', type=str, help="What should I do?")
-parser.add_argument('-i', '--input',
+parser.add_argument('-i', '--input-file',
                     type=str,
                     required=True,
                     help="VCF-like file, which need to be analysed")
-parser.add_argument('-o', '--output',
+parser.add_argument('-o', '--output-file',
                     type=str,
                     default="stdout",
                     help="Result file (default: stdout)")
