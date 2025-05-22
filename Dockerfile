@@ -150,3 +150,15 @@ ENV PATH="$PATH:/soft/vcftools_v0_1_17"
 
 WORKDIR /soft
 ENV SOFT=/soft
+
+
+##############################
+# Python script installation #
+##############################
+
+RUN apt install --assume-yes \
+    python3 pip
+WORKDIR /python-pipeline
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
+COPY ./main.py .
