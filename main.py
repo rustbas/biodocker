@@ -57,7 +57,7 @@ with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
     # print(format_header)
     for line in file.readlines()[:]:
         chrom, pos, rs, ref, alt = line.strip().split('\t')
-        pos = int(pos) - 1 # In PySam start is 0-based
+        pos = int(pos) - 1 # In PySam 'start' is 0-based
         nucleotid_in_fasta = fasta.fetch(reference=chrom, start=pos, end=pos+1)
 
         # Set REF as in FASTA file
