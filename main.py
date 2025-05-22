@@ -1,7 +1,8 @@
 from pysam import Fastafile
-from sys import argv, stderr
+from sys import argv, stderr, stdout
 import argparse
 import logging
+import os
 
 INPUT_FILE = "FP_SNPs_10k_GB38_twoAllelsFormat.tsv"
 
