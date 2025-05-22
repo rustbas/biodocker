@@ -1,16 +1,15 @@
 FROM ubuntu:22.04 AS builder
-
 RUN apt update && apt upgrade -y
-
 RUN apt install --assume-yes \
-    cmake git build-essential autoconf
+    cmake git build-essential autoconf pkg-config
+
 
 #######################
 # Building libdeflate #
 #######################
-# Version:
-# Date:
-# Repo:
+# Version: v1.24
+# Date: 2025-05-11
+# Repo: https://github.com/ebiggers/libdeflate
 
 WORKDIR /usr/src/libdelfate
 RUN git clone https://github.com/ebiggers/libdeflate.git .
@@ -21,12 +20,13 @@ RUN git fetch --tags && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN cmake -B build && cd build && make -j && make install && ldconfig
 
+
 ###################
 # Building htslib #
 ###################
-# Version:
-# Date:
-# Repo:
+# Version: v1.21
+# Date: 2004-09-12
+# Repo: https://github.com/samtools/htslib
 
 WORKDIR /usr/src/htslib
 RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git .
@@ -45,12 +45,13 @@ RUN apt install --assume-yes \
     libperl-dev
 RUN autoreconf -i && ./configure && make -j && make install && ldconfig
 
+
 #####################
 # Building samtools #
 #####################
-# Version:
-# Date:
-# Repo:
+# Version: v1.21
+# Date: 2024-09-12
+# Repo: https://github.com/samtools/samtools
 
 WORKDIR /usr/src/samtools
 RUN git clone https://github.com/samtools/samtools.git .
@@ -64,12 +65,13 @@ RUN autoheader && \
     ./configure &&\
     make -j
 
+
 #####################
 # Building bcftools #
 #####################
-# Version:
-# Date:
-# Repo:
+# Version: v1.21
+# Date: 2024-09-12
+# Repo: https://github.com/samtools/bcftools
 
 WORKDIR /usr/src/bcftools
 RUN git clone --depth=1 https://github.com/samtools/bcftools.git .
@@ -83,12 +85,13 @@ RUN autoheader && \
     ./configure --enable-libgsl --enable-perl-filters && \
     make -j
 
+
 #####################
 # Building vcftools #
 #####################
-# Version:
-# Date:
-# Repo:
+# Version: v0.1.17
+# Date: 2025-05-15
+# Repo: https://github.com/vcftools/vcftools
 
 WORKDIR /usr/src/vcftools
 RUN git clone https://github.com/vcftools/vcftools.git .
@@ -98,10 +101,13 @@ RUN git clone https://github.com/vcftools/vcftools.git .
 RUN git fetch --tags && \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
-RUN apt install -y pkg-config
 RUN ./autogen.sh && ./configure && make -j
 
-# Result image
+
+################
+# Result image #
+################
+
 FROM ubuntu:22.04 AS biodocker
 RUN apt update && apt upgrade -y
 
