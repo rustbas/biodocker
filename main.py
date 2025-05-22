@@ -61,6 +61,8 @@ with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
         n = len(header)
         logging.error(f"Expected 5 columns in header, got {n}")
         exit(1)
+    if OUTPUT_FILE == "stdout":
+        print(format_header)
     for line in file.readlines()[:]:
         chrom, pos, rs, ref, alt = line.strip().split('\t')
         pos = int(pos) - 1 # In PySam 'start' is 0-based
@@ -85,4 +87,15 @@ with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
                                      ref=ref,
                                      alt=alt)
 
-        # print(newline)
+        if OUTPUT_FILE == "stdout":
+            print(newline)
+        else:
+            result_data.append(
+                newline
+            )
+
+if OUTPUT_FILE != "stdout":
+    with open(OUTPUT_FILE, "w") as file:
+        # Hack with newline because "writelines" actually write ONE line
+        file.writelines(format_header + "\n")
+        file.writelines(line + "\n" for line in result_data)
