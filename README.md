@@ -2,9 +2,9 @@
 
 # Инструкции
 
-1. [LatexTODO]()
-2. [Dockerfile](Docker_README.md)
-3. [Скрипт python](FP_SNPs_README.md)
+1. [Задание 1: анализ](Illumina_README.md)
+2. [Задание 2: docker](Docker_README.md)
+3. [Задание 3: python](FP_SNPs_README.md)
 
 # Источники
 
