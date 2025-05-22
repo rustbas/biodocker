@@ -4,13 +4,10 @@ import argparse
 import logging
 import os
 
-INPUT_FILE = "FP_SNPs_10k_GB38_twoAllelsFormat.tsv"
-
 format_header = "#CHROM\tPOS\tID\tREF\tALT"
 format_line = "{chrom}\t{pos}\t{rs}\t{ref}\t{alt}"
 warning_string = "Can't locate nucleotid \
 {ref} in reference ({nucl}), chrom:{chrom:>6s}, pos:{pos}"
-
 
 
 # TODO: Fill usage and description
