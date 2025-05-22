@@ -62,7 +62,7 @@ python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [
 
 ## Связка с docker
 
-> [!IMPORTANT]
+> [!IMPORTANT] **Точки монтирования**
 > По умолчанию, папка `data` монтируется внутрь докера по пути
 > `/mnt/data/ref/GRCh38.d1.vd1_mainChr/sepChrs/`. Чтобы это изменить
 > нужно поменять параметр опции `-v` в файле `pipeline.sh`.
