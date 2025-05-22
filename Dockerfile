@@ -44,7 +44,7 @@ RUN ./autogen.sh && ./configure && make -j
 
 # Result image
 # TODO: build libdeflate manually
-FROM ubuntu:22.04
+FROM ubuntu:22.04 AS biodocker
 RUN apt update && apt upgrade -y
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /usr/src/samtools/samtools /soft/samtools
