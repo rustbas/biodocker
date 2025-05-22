@@ -43,7 +43,7 @@
 предупреждение в лог.
 
 Использование:
-```console
+```
 python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [--index-file INDEX_FILE]
 ```
 
