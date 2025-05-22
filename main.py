@@ -60,12 +60,9 @@ with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
     
     header = file.readline().strip().split('\t')
     logging.info(f'Readed header: {header}')
-    try:
-        assert(len(header) == 5)
-    except AssertionError:
+    if len(header) != 5:
         n = len(header)
-        # TODO: Add logging
-        print("Except 5 fields, get", n)
+        logging.error(f"Expected 5 columns in header, got {n}")
         exit(1)
     # print(format_header)
     for line in file.readlines()[:]:
