@@ -162,3 +162,9 @@ WORKDIR /python-pipeline
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 COPY ./main.py .
+
+COPY ./preprocess_script.sh .
+COPY ./entrypoint.sh .
+
+# ENTRYPOINT  ["python3",  "main.py" ]
+CMD [ "./entrypoint.sh" ]
