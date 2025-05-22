@@ -5,13 +5,36 @@ RUN apt update && apt upgrade -y
 RUN apt install --assume-yes \
     cmake git build-essential autoconf
 
+#######################
+# Building libdeflate #
+#######################
+# Version:
+# Date:
+# Repo:
+
 WORKDIR /usr/src/libdelfate
 RUN git clone https://github.com/ebiggers/libdeflate.git .
+# Checkout to latest release according to
+# https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
+RUN git fetch --tags && \
+    latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
+    git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN cmake -B build && cd build && make -j && make install && ldconfig
 
-# Building htslib (TODO: use latest tag)
+###################
+# Building htslib #
+###################
+# Version:
+# Date:
+# Repo:
+
 WORKDIR /usr/src/htslib
 RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git .
+# Checkout to latest release according to
+# https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
+RUN git fetch --tags && \
+    latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
+    git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN apt install --assume-yes \
     zlib1g-dev \
     libbz2-dev \
@@ -22,30 +45,66 @@ RUN apt install --assume-yes \
     libperl-dev
 RUN autoreconf -i && ./configure && make -j && make install && ldconfig
 
-# Building samtools
+#####################
+# Building samtools #
+#####################
+# Version:
+# Date:
+# Repo:
+
 WORKDIR /usr/src/samtools
 RUN git clone https://github.com/samtools/samtools.git .
+# Checkout to latest release according to
+# https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
+RUN git fetch --tags && \
+    latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
+    git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN autoheader && \
     autoconf -Wno-syntax && \
     ./configure &&\
     make -j
 
+#####################
+# Building bcftools #
+#####################
+# Version:
+# Date:
+# Repo:
+
 WORKDIR /usr/src/bcftools
 RUN git clone --depth=1 https://github.com/samtools/bcftools.git .
+# Checkout to latest release according to
+# https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
+RUN git fetch --tags && \
+    latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
+    git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN autoheader && \
     autoconf && \
     ./configure --enable-libgsl --enable-perl-filters && \
     make -j
 
+#####################
+# Building vcftools #
+#####################
+# Version:
+# Date:
+# Repo:
+
 WORKDIR /usr/src/vcftools
 RUN git clone https://github.com/vcftools/vcftools.git .
+
+# Checkout to latest release according to
+# https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
+RUN git fetch --tags && \
+    latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
+    git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN apt install -y pkg-config
 RUN ./autogen.sh && ./configure && make -j
 
 # Result image
-# TODO: build libdeflate manually
 FROM ubuntu:22.04 AS biodocker
 RUN apt update && apt upgrade -y
+ENV SOFT=/soft
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /usr/src/samtools/samtools /soft/samtools
 COPY --from=builder /usr/src/bcftools/bcftools /soft/bcftools
