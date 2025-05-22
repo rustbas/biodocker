@@ -44,7 +44,7 @@
 
 Использование:
 ```console
-foo@bar:~$ python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [--index-file INDEX_FILE]
+python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [--index-file INDEX_FILE]
 ```
 
 ### Аргументы командной строки
