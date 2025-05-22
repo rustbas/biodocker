@@ -34,6 +34,7 @@ parser.add_argument('-r', '--reference',
                     help="Reference file")
 parser.add_argument('--index-file',
                     type=str,
+                    default=None,
                     help="Reference index file (default: [REFERENCE FILE].fai)")
 namespace = parser.parse_args()
 
@@ -50,6 +51,11 @@ else:
 
 INPUT_FILE = namespace.input_file
 OUTPUT_FILE = namespace.output_file
+REFERENCE_FILE = namespace.reference
+if (namespace.index_file is None):
+    INDEX_FILE = REFERENCE_FILE + ".fai"
+else:
+    INDEX_FILE = namespace.index_file
 
 if OUTPUT_FILE != "stdout":
     result_data = []
@@ -59,7 +65,7 @@ if not os.path.exists(INPUT_FILE):
     exit(1)
 
 # TODO: add output file if needed
-with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
+with Fastafile(filename=REFERENCE_FILE, filepath_index=INDEX_FILE) as fasta, \
      open(INPUT_FILE, "r") as file:
     
     header = file.readline().strip().split('\t')
