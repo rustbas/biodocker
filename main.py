@@ -32,6 +32,9 @@ parser.add_argument('-r', '--reference',
                     type=str,
                     required=True,
                     help="Reference file")
+parser.add_argument('--index-file',
+                    type=str,
+                    help="Reference index file (default: [REFERENCE FILE].fai)")
 namespace = parser.parse_args()
 
 if namespace.log_file == "stderr":
