@@ -104,15 +104,43 @@ RUN ./autogen.sh && ./configure && make -j
 # Result image
 FROM ubuntu:22.04 AS biodocker
 RUN apt update && apt upgrade -y
-ENV SOFT=/soft
+
+##########################
+# Libraries installation #
+##########################
+
 COPY --from=builder /usr/local /usr/local
-COPY --from=builder /usr/src/samtools/samtools /soft/samtools
-COPY --from=builder /usr/src/bcftools/bcftools /soft/bcftools
-COPY --from=builder /usr/src/vcftools/src/cpp/vcftools /soft/vcftools
 RUN ldconfig
 RUN apt install --assume-yes --no-install-recommends\
     libgsl0-dev \
     libperl-dev \
     libcurl3-gnutls-dev
 
+#########################
+# Samtools installation #
+#########################
+
+COPY --from=builder /usr/src/samtools/samtools /soft/samtools_v1_21/samtools
+ENV SAMTOOLS=/soft/samtools_v1_21/samtools
+ENV PATH="$PATH:/soft/samtools_v1_21"
+
+
+#########################
+# Samtools installation #
+#########################
+
+COPY --from=builder /usr/src/bcftools/bcftools /soft/bcftools_v1_21/bcftools
+ENV BCFTOOLS=/soft/bcftools_v1_21/bcftools
+ENV PATH="$PATH:/soft/bcftools_v1_21"
+
+
+#########################
+# Samtools installation #
+#########################
+
+COPY --from=builder /usr/src/vcftools/src/cpp/vcftools /soft/vcftools_v0_1_17/vcftools
+ENV VCFTOOLS=/soft/vcftools_v0_1_17/vcftools
+ENV PATH="$PATH:/soft/vcftools_v0_1_17"
+
 WORKDIR /soft
+ENV SOFT=/soft
