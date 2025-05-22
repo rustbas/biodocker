@@ -159,12 +159,12 @@ ENV SOFT=/soft
 RUN apt install --assume-yes \
     python3 pip
 WORKDIR /python-pipeline
-COPY ./requirements.txt .
+COPY ./src/requirements.txt .
 RUN pip install -r requirements.txt
-COPY ./main.py .
+COPY ./src/main.py .
 
-COPY ./preprocess_script.sh .
-COPY ./entrypoint.sh .
+COPY ./src/preprocess_script.sh .
+COPY ./src/entrypoint.sh .
 
 # ENTRYPOINT  ["python3",  "main.py" ]
 CMD [ "./entrypoint.sh" ]

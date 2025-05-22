@@ -64,7 +64,6 @@ if not os.path.exists(INPUT_FILE):
     logging.error(f"No such file or directory: '{INPUT_FILE}'")
     exit(1)
 
-# TODO: add output file if needed
 with Fastafile(filename=REFERENCE_FILE, filepath_index=INDEX_FILE) as fasta, \
      open(INPUT_FILE, "r") as file:
     
@@ -112,3 +111,4 @@ if OUTPUT_FILE != "stdout":
         # Hack with newline because "writelines" actually write ONE line
         file.writelines(format_header + "\n")
         file.writelines(line + "\n" for line in result_data)
+    logging.info(f"Writed data to '{OUTPUT_FILE}'")
