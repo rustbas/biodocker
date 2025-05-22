@@ -33,18 +33,31 @@ parser.add_argument('-l', '--log-file',
                     help="Log-file (default: stderr)")
 namespace = parser.parse_args()
 
-if namespace.log_file != "stderr":
+if namespace.log_file == "stderr":
+    logging.basicConfig(level=logging.INFO, stream=stderr,
+                        format="%(asctime)s %(levelname)s %(message)s")
+elif namespace.log_file == "stdout": 
+    logging.basicConfig(level=logging.INFO, stream=stdout,
+                        format="%(asctime)s %(levelname)s %(message)s")   
+else:
     logging.basicConfig(level=logging.INFO, filename=namespace.log_file,
                         filemode="a",
                         format="%(asctime)s %(levelname)s %(message)s")
-else:
-    logging.basicConfig(level=logging.INFO, stream=stderr,
-                        format="%(asctime)s %(levelname)s %(message)s")
-# TODO: check file exists
+
+INPUT_FILE = namespace.input_file
+OUTPUT_FILE = namespace.output_file
+
+if OUTPUT_FILE != "stdout":
+    result_data = []
+
+if not os.path.exists(INPUT_FILE):
+    logging.error(f"No such file or directory: '{INPUT_FILE}'")
+    exit(1)
 
 # TODO: add output file if needed
 with Fastafile("GRCh38.d1.vd1.fa") as fasta, \
      open(INPUT_FILE, "r") as file:
+    
     header = file.readline().strip().split('\t')
     logging.info(f'Readed header: {header}')
     try:
