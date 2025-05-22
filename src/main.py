@@ -10,7 +10,6 @@ warning_string = "Can't locate nucleotid \
 {ref} in reference ({nucl}), chrom:{chrom:>6s}, pos:{pos}"
 
 
-# TODO: Fill usage and description
 DESCRIPTION="""
 Convert data from
 '#CHROM<TAB>POS<TAB>ID<TAB>allele1<TAB>allele2'
