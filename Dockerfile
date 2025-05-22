@@ -49,15 +49,11 @@ RUN apt update && apt upgrade -y
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /usr/src/samtools/samtools /soft/samtools
 COPY --from=builder /usr/src/bcftools/bcftools /soft/bcftools
+COPY --from=builder /usr/src/vcftools/src/cpp/vcftools /soft/vcftools
 RUN ldconfig
 RUN apt install --assume-yes --no-install-recommends\
     libgsl0-dev \
     libperl-dev \
     libcurl3-gnutls-dev
-
-#     zlib1g-dev \
-#     libbz2-dev \
-#     liblzma-dev \
-#     libncurses5-dev \
 
 WORKDIR /soft
