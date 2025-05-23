@@ -118,12 +118,17 @@ RUN apt-get update && apt-get upgrade -y
 
 COPY --from=builder /usr/local /usr/local
 RUN ldconfig
+
+# Install dependencies and clean up after that
+# According to
+# https://github.com/hadolint/hadolint/wiki/DL3009
 RUN apt-get install --assume-yes --no-install-recommends\
     libgsl0-dev \
     libperl-dev \
     libcurl3-gnutls-dev \
     python3 \
-    pip
+    pip && apt-get clean &&\
+    rm -rf /var/lib/apt/lists/*
 
 #########################
 # Samtools installation #
