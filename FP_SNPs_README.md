@@ -86,6 +86,7 @@ python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [
 2. Индексирует референс, если индекса нет;
 3. Запускает скрипт с необходимыми параметрами;
 4. Выводит логи в файл `data/pipeline.log`.
+5. Результат пишет в `data/result_file.tsv`
 
 Вторая представляет собой пайплайн работы. Использование:
 ```console
