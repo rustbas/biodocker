@@ -1,6 +1,6 @@
 FROM ubuntu:22.04 AS builder
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install --assume-yes\
+RUN apt-get install --assume-yes                                               \
     cmake git build-essential autoconf pkg-config
 
 
@@ -15,7 +15,7 @@ WORKDIR /usr/src/libdelfate
 RUN git clone https://github.com/ebiggers/libdeflate.git .
 # Checkout to latest release according to
 # https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
-RUN git fetch --tags && \
+RUN git fetch --tags &&                                                        \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
 # TODO: use workdir
@@ -33,16 +33,16 @@ WORKDIR /usr/src/htslib
 RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git .
 # Checkout to latest release according to
 # https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
-RUN git fetch --tags && \
+RUN git fetch --tags &&                                                        \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
-RUN apt-get install --assume-yes\
-    zlib1g-dev \
-    libbz2-dev \
-    liblzma-dev \
-    libcurl3-gnutls-dev \
-    libncurses5-dev \
-    libgsl0-dev \
+RUN apt-get install --assume-yes                                               \
+    zlib1g-dev                                                                 \
+    libbz2-dev                                                                 \
+    liblzma-dev                                                                \
+    libcurl3-gnutls-dev                                                        \
+    libncurses5-dev                                                            \
+    libgsl0-dev                                                                \
     libperl-dev
 RUN autoreconf -i && ./configure && make -j && make install && ldconfig
 
@@ -58,12 +58,12 @@ WORKDIR /usr/src/samtools
 RUN git clone https://github.com/samtools/samtools.git .
 # Checkout to latest release according to
 # https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
-RUN git fetch --tags && \
+RUN git fetch --tags &&                                                        \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
-RUN autoheader && \
-    autoconf -Wno-syntax && \
-    ./configure &&\
+RUN autoheader &&                                                              \
+    autoconf -Wno-syntax &&                                                    \
+    ./configure &&                                                             \
     make -j
 
 
@@ -78,12 +78,12 @@ WORKDIR /usr/src/bcftools
 RUN git clone --depth=1 https://github.com/samtools/bcftools.git .
 # Checkout to latest release according to
 # https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
-RUN git fetch --tags && \
+RUN git fetch --tags &&                                                        \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
-RUN autoheader && \
-    autoconf && \
-    ./configure --enable-libgsl --enable-perl-filters && \
+RUN autoheader &&                                                              \
+    autoconf &&                                                                \
+    ./configure --enable-libgsl --enable-perl-filters &&                       \
     make -j
 
 
@@ -99,7 +99,7 @@ RUN git clone https://github.com/vcftools/vcftools.git .
 
 # Checkout to latest release according to
 # https://stackoverflow.com/questions/17414104/git-checkout-latest-tag
-RUN git fetch --tags && \
+RUN git fetch --tags &&                                                        \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
 RUN ./autogen.sh && ./configure && make -j
@@ -122,12 +122,12 @@ RUN ldconfig
 # Install dependencies and clean up after that
 # According to
 # https://github.com/hadolint/hadolint/wiki/DL3009
-RUN apt-get install --assume-yes --no-install-recommends\
-    libgsl0-dev \
-    libperl-dev \
-    libcurl3-gnutls-dev \
-    python3 \
-    pip && apt-get clean &&\
+RUN apt-get install --assume-yes --no-install-recommends                       \
+    libgsl0-dev                                                                \
+    libperl-dev                                                                \
+    libcurl3-gnutls-dev                                                        \
+    python3                                                                    \
+    pip && apt-get clean &&                                                    \
     rm -rf /var/lib/apt/lists/*
 
 #########################
