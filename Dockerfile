@@ -157,11 +157,9 @@ ENV SOFT=/soft
 # Python script installation #
 ##############################
 
-RUN apt-get install --assume-yes --no-install-recommends\
-    python3 pip
 WORKDIR /python-pipeline
 COPY ./src/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 COPY ./src/main.py .
 
 COPY ./src/preprocess_script.sh .
