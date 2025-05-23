@@ -166,5 +166,5 @@ COPY ./src/main.py .
 COPY ./src/preprocess_script.sh .
 COPY ./src/entrypoint.sh .
 
-# ENTRYPOINT  ["python3",  "main.py" ]
-CMD [ "./entrypoint.sh" ]
+CMD  [ "bash" ]
+# CMD [ "./entrypoint.sh" ]

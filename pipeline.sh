@@ -17,6 +17,9 @@ while getopts "hd:e:" OPT; do
             ;;
         e)
             ENTRYPOINT="$OPTARG"
+            if [ "$OPTARG" = "run" ]; then
+                ENTRYPOINT="./entrypoint.sh"
+            fi
             echo $ENTRYPOINT
             ;;
 	\?)
