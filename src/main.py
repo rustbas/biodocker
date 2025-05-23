@@ -109,7 +109,7 @@ with Fastafile(filename=REFERENCE_FILE, filepath_index=INDEX_FILE) as fasta, \
 
 if OUTPUT_FILE != "stdout":
     with open(OUTPUT_FILE, "w") as file:
-        # Hack with newline because "writelines" actually write ONE line
+        # Hack with newline because "writelines" actually write one line
         file.writelines(format_header + "\n")
         file.writelines(line + "\n" for line in result_data)
     logging.info(f"Writed data to '{OUTPUT_FILE}'")
