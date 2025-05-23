@@ -121,7 +121,9 @@ RUN ldconfig
 RUN apt-get install --assume-yes --no-install-recommends\
     libgsl0-dev \
     libperl-dev \
-    libcurl3-gnutls-dev
+    libcurl3-gnutls-dev \
+    python3 \
+    pip
 
 #########################
 # Samtools installation #
