@@ -64,3 +64,14 @@
 2025-05-23 10:48:46,526 WARNING Can't locate nucleotid T in reference (G), chrom: chr15, pos:22907409
 2025-05-23 10:48:46,526 WARNING Can't locate nucleotid T in reference (A), chrom: chr15, pos:22832211
 2025-05-23 10:48:46,945 INFO Writed data to '/ref/GRCh38.d1.vd1_mainChr/sepChrs/result_file.tsv'
+2025-05-23 12:41:56,929 INFO Readed header: ['#CHROM', 'POS', 'ID', 'ALLELE1', 'ALLELE2']
+2025-05-23 12:41:57,092 WARNING Can't locate nucleotid T in reference (G), chrom:  chr1, pos:145899154
+2025-05-23 12:41:57,891 WARNING Can't locate nucleotid T in reference (G), chrom: chr10, pos:47420742
+2025-05-23 12:41:57,891 WARNING Can't locate nucleotid C in reference (T), chrom: chr10, pos:47320206
+2025-05-23 12:41:57,891 WARNING Can't locate nucleotid T in reference (A), chrom: chr10, pos:47268341
+2025-05-23 12:41:57,891 WARNING Can't locate nucleotid G in reference (T), chrom: chr10, pos:47099481
+2025-05-23 12:41:57,891 WARNING Can't locate nucleotid A in reference (C), chrom: chr10, pos:46031828
+2025-05-23 12:41:57,897 WARNING Can't locate nucleotid C in reference (G), chrom: chr11, pos:54678669
+2025-05-23 12:41:57,915 WARNING Can't locate nucleotid T in reference (G), chrom: chr15, pos:22907409
+2025-05-23 12:41:57,915 WARNING Can't locate nucleotid T in reference (A), chrom: chr15, pos:22832211
+2025-05-23 12:41:57,940 INFO Writed data to '/ref/GRCh38.d1.vd1_mainChr/sepChrs/result_file.tsv'
