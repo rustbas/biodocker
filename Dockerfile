@@ -1,6 +1,6 @@
 FROM ubuntu:22.04 AS builder
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install --assume-yes --no-install-recommends\
+RUN apt-get install --assume-yes\
     cmake git build-essential autoconf pkg-config
 
 
@@ -36,7 +36,7 @@ RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git .
 RUN git fetch --tags && \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
-RUN apt-get install --assume-yes --no-install-recommends\
+RUN apt-get install --assume-yes\
     zlib1g-dev \
     libbz2-dev \
     liblzma-dev \
