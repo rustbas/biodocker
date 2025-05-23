@@ -57,3 +57,8 @@ foo@bar:~$ docker run --rm -it biodocker
 ```console
 foo@bar:~$ ./pipeline.sh
 ```
+
+Также, образ доступен из DockerHub:
+```console
+foo@bar:~$ docker pull wtukatyr/biodocker:v0.1.1
+```
