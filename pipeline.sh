@@ -1,12 +1,13 @@
 #!/usr/bin/bash
 
 USAGE_MSG="""\
-Usage: $0 -e [ENTRYPOINT] -d [DOCKER IMAGE NAME]\
+Usage: $0 -e [ENTRYPOINT] -d [DOCKER IMAGE NAME] -v [DATA FOLDER]\
 """
 
 DOCKERNAME=biodocker
+DATA_FOLDER="${PWD}/data/"
 
-while getopts "hd:e:" OPT; do
+while getopts "hd:e:v:" OPT; do
     case $OPT in
 	d)
             DOCKERNAME="$OPTARG"
@@ -22,6 +23,10 @@ while getopts "hd:e:" OPT; do
             fi
             echo $ENTRYPOINT
             ;;
+        v)
+            DATA_FOLDER="$OPTARG"
+            echo "$DATA_FOLDER"
+            ;;
 	\?)
 	    echo "Invalid option: $OPT"
 	    echo "$USAGE_MSG"
@@ -33,10 +38,10 @@ docker build -t $DOCKERNAME .
 
 if [ -n "$ENTRYPOINT" ]; then
     docker run --rm -it \
-           -v ${PWD}/data/:/ref/GRCh38.d1.vd1_mainChr/sepChrs/ \
+           -v ${DATA_FOLDER}:/ref/GRCh38.d1.vd1_mainChr/sepChrs/ \
            $DOCKERNAME "$ENTRYPOINT"
 else
     docker run --rm -it \
-           -v ${PWD}/data/:/ref/GRCh38.d1.vd1_mainChr/sepChrs/ \
+           -v ${DATA_FOLDER}:/ref/GRCh38.d1.vd1_mainChr/sepChrs/ \
            $DOCKERNAME
 fi

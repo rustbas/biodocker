@@ -62,11 +62,6 @@ python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [
 
 ## Связка с docker
 
-> [!IMPORTANT]
-> По умолчанию, папка `data` монтируется внутрь докера по пути
-> `/mnt/data/ref/GRCh38.d1.vd1_mainChr/sepChrs/`. Чтобы это изменить
-> нужно поменять параметр опции `-v` в файле `pipeline.sh`.
-
 Для демонстрации работы написаны скрипты `entrypoint.sh` (лежит в
 директории `src`) и `pipeline.sh`.
 
@@ -79,13 +74,17 @@ python3 main.py [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-l LOG_FILE] -r REFERENCE [
 
 Вторая представляет собой пайплайн работы. Использование:
 ```console
-foo@bar:~$ ./pipeline.sh -e [ENTRYPOINT] -d [DOCKER IMAGE NAME]
+foo@bar:~$ ./pipeline.sh -e [ENTRYPOINT] -d [DOCKER IMAGE NAME] -v [DATA FOLDER]
 ```
 
-Скрипт собирает образ и выполняет работу, связанную с ним.
+Скрипт собирает образ и запускает контейнер.
 
 Аргументы:
 1.  `ENTRYPOINT` -- вход в программу. По умолчанию не задан и докер
-    выполняет скрипт. Можно задать `bash` и тогда при запуске будет
-    произведен вход в интерактивную оболочку.
-2.  `DOCKER IMAGE NAME` -- имя докер-образа. По умолчанию `biodocker`
+    запускает `bash`. Можно задать `run` и тогда при запуске
+    выполнится скрипт;
+2.  `DOCKER IMAGE NAME` -- имя докер-образа. По умолчанию `biodocker`;
+3. `DATA FOLDER` -- папка, которая монтируется внутрь контейнера по
+   пути `/ref/GRCh38.d1.vd1_mainChr/sepChrs/`.  По умолчанию
+   `$PWD/data/`. **Важно**: путь должен быть абсолютный и
+   заканчиваться на `/`.
