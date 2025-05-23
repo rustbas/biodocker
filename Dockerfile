@@ -1,6 +1,6 @@
 FROM ubuntu:22.04 AS builder
-RUN apt update && apt upgrade -y
-RUN apt install --assume-yes \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install --assume-yes --no-install-recommends\
     cmake git build-essential autoconf pkg-config
 
 
@@ -18,6 +18,7 @@ RUN git clone https://github.com/ebiggers/libdeflate.git .
 RUN git fetch --tags && \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
+# TODO: use workdir
 RUN cmake -B build && cd build && make -j && make install && ldconfig
 
 
@@ -35,7 +36,7 @@ RUN git clone --depth=1 --recursive https://github.com/samtools/htslib.git .
 RUN git fetch --tags && \
     latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)") && \
     git checkout $latestTag && echo $latestTag > VERSION.txt
-RUN apt install --assume-yes \
+RUN apt-get install --assume-yes --no-install-recommends\
     zlib1g-dev \
     libbz2-dev \
     liblzma-dev \
@@ -109,7 +110,7 @@ RUN ./autogen.sh && ./configure && make -j
 ################
 
 FROM ubuntu:22.04 AS biodocker
-RUN apt update && apt upgrade -y
+RUN apt-get update && apt-get upgrade -y
 
 ##########################
 # Libraries installation #
@@ -117,7 +118,7 @@ RUN apt update && apt upgrade -y
 
 COPY --from=builder /usr/local /usr/local
 RUN ldconfig
-RUN apt install --assume-yes --no-install-recommends\
+RUN apt-get install --assume-yes --no-install-recommends\
     libgsl0-dev \
     libperl-dev \
     libcurl3-gnutls-dev
@@ -156,7 +157,7 @@ ENV SOFT=/soft
 # Python script installation #
 ##############################
 
-RUN apt install --assume-yes --no-install-recommends\
+RUN apt-get install --assume-yes --no-install-recommends\
     python3 pip
 WORKDIR /python-pipeline
 COPY ./src/requirements.txt .
