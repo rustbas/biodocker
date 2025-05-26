@@ -140,7 +140,7 @@ ENV PATH="$PATH:/soft/samtools_v1_21"
 
 
 #########################
-# Samtools installation #
+# BCFTools installation #
 #########################
 
 COPY --from=builder /usr/src/bcftools/bcftools /soft/bcftools_v1_21/bcftools
@@ -149,7 +149,7 @@ ENV PATH="$PATH:/soft/bcftools_v1_21"
 
 
 #########################
-# Samtools installation #
+# VCFTools installation #
 #########################
 
 COPY --from=builder /usr/src/vcftools/src/cpp/vcftools /soft/vcftools_v0_1_17/vcftools
