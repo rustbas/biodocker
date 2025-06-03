@@ -1,0 +1,10 @@
+name: build and push docker
+on: [workflow_dispatch]
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: hello
+        run: |
+          echo "Hello from GitHub Action!"
