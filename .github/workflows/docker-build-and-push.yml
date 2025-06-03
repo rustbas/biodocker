@@ -2,9 +2,12 @@ name: build and push docker
 on: [workflow_dispatch]
 
 jobs:
-  hello:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: hello
-        run: |
-          echo "Hello from GitHub Action!"
+      - name: Get codebase
+        uses: actions/checkout@v4
+        with:
+          ref: 'refs/tags/v.0.1.0'
+      - name: Show files
+        run: ls -la
