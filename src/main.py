@@ -90,12 +90,12 @@ with Fastafile(filename=REFERENCE_FILE, filepath_index=INDEX_FILE) as fasta, \
             warning = warning_string.format(ref=ref,
                                             nucl=nucleotid_in_fasta,
                                             chrom=chrom,
-                                            pos=pos)
+                                            pos=pos+1)
             logging.warning(warning) # Log
             continue
 
         newline = format_line.format(chrom=chrom,
-                                     pos=pos,
+                                     pos=pos+1,
                                      rs=rs,
                                      ref=ref,
                                      alt=alt)
