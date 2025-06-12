@@ -1,4 +1,8 @@
-# Начальные данные
+# Biodocker
+
+> [!TIP]
+> Этот репозиторий был сделан в рамках тестового задания и позже был улучшен.
+> Первоначальная версия хранится в ветке **test-task**.
 
 - `data/FP_SNPs.txt` -- GRAF-файл, взятый с [сайта](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/Software.cgi).
 - `data/GRCh38.d1.vd1.fa` -- референсный геном.
